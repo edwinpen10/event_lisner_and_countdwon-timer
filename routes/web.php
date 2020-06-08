@@ -18,6 +18,11 @@ Route::get('/', function () {
 });
 
 Auth::routes(['verify' => true ]);
+Route::get('/menu', 'MenuController@list')->name('menu.list');
+Route::post('/menu', 'MenuController@store')->name('menu.store');
+Route::get('/setrole', 'MenuController@setrole')->name('menu.setrole');
+Route::post('/storerole', 'MenuController@storerole')->name('menu.storerole');
+
 
 Route::get('/list', 'TimerController@list')->name('timer');
 Route::get('/order', 'TimerController@order');

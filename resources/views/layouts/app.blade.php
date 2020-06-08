@@ -56,6 +56,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('product.create') }}">{{ __('Create Porduct') }}</a>
                         </li> 
+                        @foreach ($rolemenus as $menu)
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{$menu->menu->address}}">{{$menu->menu->menu_name}}</a>
+                        </li> 
+                        @endforeach
+                       
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
