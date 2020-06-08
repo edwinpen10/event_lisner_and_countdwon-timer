@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Laravel</title>
 
     <!-- Fonts -->
@@ -72,18 +72,38 @@
             <h3 class="text-uppercase">Timer order </h3>
             </div>
             <div class="col-sm-6 offset-md-3">
-                <form action="{{ route('product.store') }}" method="post">
-                    @csrf
-                    <h1>Dengan looping</h1>
-                    @foreach ($orders as $item)
-                <div data-countdown="{{$item->tgl_order}}"></div>
+                <h1>Dengan looping</h1>
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Status</th>
+                        <th scope="col">Time over</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($orders as $item)
+
+                         <tr>
+                            <th scope="row">
+                                <div id="alert" class="alert" role="alert" >
+                                    {{$item->status_order}}
+                              </div></th>
+                            <td> <div id-data="{{$item->id}}" data-countdown="{{$item->tgl_order}}" data-value="{{$item->status_order}}"></div> </td>
+                          </tr>
+                        
+                        
+                         @endforeach
+                     
+                    </tbody>
+                  </table>
+                    
+                   
                 
-                    @endforeach
 
                     <h1>tampa looping</h1>
                 <div id="mytimer" data="2020-06-05 15:51:00"></div>
                    <div id="clock"></div>
-                </form>
+                
             </div>
         </div>
     </div>
@@ -92,17 +112,33 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>s
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <script src="{{asset('assets/jquery.countdown.min.js')}}"></script>
 <script src="{{asset('assets/moment.js')}}"></script>
 <script src="{{asset('assets/moment-timezone-with-data.js')}}"></script>
 <script>
+
+
+
 $('[data-countdown]').each(function() {
    var $this = $(this), finalDate = $(this).data('countdown');
    var timerx = moment.tz( finalDate, "Asia/Jakarta");
+   let id_timer = $this[0].attributes[0].value
+   let status = $this[0].attributes[2].value
    $this.countdown(timerx.toDate(), function(event) {
      var x = $this.html(event.strftime('%H:%M:%S'));
-    
+     if(x[0].textContent=="00:00:00" && status =="Belum bayar"){
+        console.log(id_timer)
+    //     $(".alert").addClass("alert-danger")
+        $.ajax({
+        type: "GET",
+         url:"/update/status/"+id_timer,
+         success:function(response){
+            location.reload(); 
+         }
+       })
+    }
    });
 });
 
@@ -112,11 +148,11 @@ var x = document.getElementById("mytimer").getAttribute("data");
 var timer = moment.tz(x, "Asia/Jakarta");
 
 $('#clock').countdown(timer.toDate(), function(event) {
-    
     var d =$(this).html(event.strftime('%H:%M:%S'));
     if(d[0].textContent=="00:00:00"){
-        window.location = "http://localhost:8000/create"
+        
     }
+
 });
 
 

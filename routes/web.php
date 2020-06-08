@@ -21,6 +21,7 @@ Auth::routes(['verify' => true ]);
 
 Route::get('/list', 'TimerController@list')->name('timer');
 Route::get('/order', 'TimerController@order');
+Route::get('/update/status/{id}', 'TimerController@updatestatus')->name('status.update');
 Route::get('/create', 'ProductController@create')->name('product.create');;
 Route::post('/store', 'ProductController@store')->name('product.store');
 Auth::routes();
