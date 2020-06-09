@@ -83,29 +83,29 @@
                     <tbody>
                         @foreach ($orders as $item)
                         @php
-                            dd($orders)
+                            //dd($orders)
                         @endphp
                          <tr>
                             <th scope="row">
                                 <div id="alert" class="alert" role="alert" >
-                                    {{$key->status_order}}
+                                    {{$item['status_order']}}
                               </div></th>
-                            <td> <div id-data="{{$key->id}}" data-countdown="{{$key->tgl_order}}" data-value="{{$key->status_order}}"></div> </td>
+                            <td> <div id-data="{{$item['id']}}" data-countdown="{{$item['tgl_order']}}" data-value="{{$item['status_order']}}"></div> </td>
                           </tr>
-                        
-                        
+
+
                          @endforeach
-                     
+
                     </tbody>
                   </table>
-                    
-                   
-                
+
+
+
 
                     <h1>tampa looping</h1>
                 <div id="mytimer" data="2020-06-05 15:51:00"></div>
                    <div id="clock"></div>
-                
+
             </div>
         </div>
     </div>
@@ -137,7 +137,7 @@ $('[data-countdown]').each(function() {
         type: "GET",
          url:"/update/status/"+id_timer,
          success:function(response){
-            location.reload(); 
+            location.reload();
          }
        })
     }
@@ -152,7 +152,7 @@ var timer = moment.tz(x, "Asia/Jakarta");
 $('#clock').countdown(timer.toDate(), function(event) {
     var d =$(this).html(event.strftime('%H:%M:%S'));
     if(d[0].textContent=="00:00:00"){
-        
+
     }
 
 });

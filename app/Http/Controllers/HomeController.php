@@ -29,6 +29,6 @@ class HomeController extends Controller
         Redis::set('email-'.Auth::user()->id, Auth::user()->email);
         $user = Redis::get('email-'.Auth::user()->id);
         return view('home', compact('rolemenus','user'));
-        
+
     }
 }

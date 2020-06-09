@@ -31,9 +31,9 @@ class LoginController extends Controller
      * @var string
      */
     //protected $redirectTo = RouteServiceProvider::HOME;
-   
+
      public function login(Request $request)
-     {  
+     {
 
         $input = $request->all();
 
@@ -45,19 +45,19 @@ class LoginController extends Controller
         if(auth()->attempt(array($fieldType => $input['email'], 'password' => $input['password'])))
         {
             toastr()->success('Login successfully!');
-           
-            
+
+
            return redirect()->route('home');
-            
+
         }else{
 
             toastr()->error('Login failed please try again later.');
             return redirect()->route('login');
-            
+
         }
 
-          
-        
+
+
      }
 
      public function logout()

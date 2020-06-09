@@ -20,8 +20,8 @@ class TimerController extends Controller
     }
 
     public function order()
-    {   
-       
+    {
+
         date_default_timezone_set('Asia/Jakarta');
         $startTime = date("Y-m-d H:i:s");
         $cenvertedTime = date('Y-m-d H:i:s',strtotime('+0 hours +2 minutes +00 seconds',strtotime($startTime)));
@@ -34,27 +34,24 @@ class TimerController extends Controller
         $order->save();
 
         $tgl=$order->tgl_order;
-       
+
          return view('timer',compact('tgl'));
-       
+
     }
 
     public function list()
-    {   
-        
+    {
+
          $cek = Redis::keys('order-*-'.Auth::user()->id);
          if($cek){
-             
+
             $n=[];
-            foreach ($cek as $item) { 
+            foreach ($cek as $item) {
                       $a = Redis::get('order-'.substr($item,23,2).'-'.Auth::user()->id);
-                    //echo $item;
                     array_push($n,json_decode($a, true));
                 }
-                //$order = json_encode($n);
-                
-               echo($n[0]["id"]);  
-           //return view('timer',compact('orders'));
+                $orders = $n;
+           return view('timer',compact('orders'));
          }else {
              $orders = Order::where('user_id', Auth::user()->id)->where('status_order','Belum bayar')->get();
                  if($orders!="[]"){
@@ -64,26 +61,26 @@ class TimerController extends Controller
                     return view('timer',compact('orders'));
                 }else{
                     return view('timer',compact('orders'));
-                }    
+                }
          }
-        
+
     }
 
     public function updatestatus($id)
-    {   
+    {
         $order= Order::find($id);
         if($order->user_id==Auth::user()->id){
             $order->status_order =  "Waktu habis";
             $order->save();
-            Redis::del('order-*-'.Auth::user()->id);
+            Redis::del('order-'.$id.'-'.Auth::user()->id);
             return $id;
         }
 
         $orders=Order::where('user_id', Auth::user()->id )->get();
-      
+
         $tgl= $orders->tgl_order;
 
-       
+
         return view('timer',compact('tgl'));
     }
 }
