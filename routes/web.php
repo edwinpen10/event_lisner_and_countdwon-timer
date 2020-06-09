@@ -32,3 +32,4 @@ Route::post('/store', 'ProductController@store')->name('product.store');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->middleware('verified')->name('home');
+Route::get('/logout', 'Auth\LoginController@logout')->middleware('verified')->name('logout');

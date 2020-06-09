@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 use App\Rolemenu;
 class HomeController extends Controller
 {
@@ -25,8 +26,9 @@ class HomeController extends Controller
     public function index()
     {
         $rolemenus = Rolemenu::where('id_user', Auth::user()->id)->with('menu')->get();
-       
-        return view('home', compact('rolemenus'));
+        Redis::set('email-'.Auth::user()->id, Auth::user()->email);
+        $user = Redis::get('email-'.Auth::user()->id);
+        return view('home', compact('rolemenus','user'));
         
     }
 }

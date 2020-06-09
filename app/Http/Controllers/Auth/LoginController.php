@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
+
 
 class LoginController extends Controller
 {
@@ -44,7 +45,9 @@ class LoginController extends Controller
         if(auth()->attempt(array($fieldType => $input['email'], 'password' => $input['password'])))
         {
             toastr()->success('Login successfully!');
-            return redirect()->route('home');
+           
+            
+           return redirect()->route('home');
             
         }else{
 
@@ -55,6 +58,13 @@ class LoginController extends Controller
 
           
         
+     }
+
+     public function logout()
+     {
+        Redis::del('email-'.Auth::user()->id);
+        Auth::logout();
+        return redirect('/');
      }
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\DB;
 use App\Order;
 class TimerController extends Controller
@@ -33,18 +34,38 @@ class TimerController extends Controller
         $order->save();
 
         $tgl=$order->tgl_order;
-        return view('timer',compact('tgl'));
+       
+         return view('timer',compact('tgl'));
        
     }
 
     public function list()
-    {
-        $orders = DB::table('orders')->where('user_id', Auth::user()->id)->where('status_order','Belum bayar')->get();
-        //dd($orders);
-        // $tgl=$orders->tgl_order;
-        //$user_id=$orders->user_id;
-        //dd($orders);
-        return view('timer',compact('orders'));
+    {   
+        
+         $cek = Redis::keys('order-*-'.Auth::user()->id);
+         if($cek){
+             
+            $n=[];
+            foreach ($cek as $item) { 
+                      $a = Redis::get('order-'.substr($item,23,2).'-'.Auth::user()->id);
+                    //echo $item;
+                    array_push($n,$a);
+                }
+                 $orders = strval(json_encode($n));
+                 
+           //return view('timer',compact('orders'));
+         }else {
+             $orders = Order::where('user_id', Auth::user()->id)->where('status_order','Belum bayar')->get();
+                 if($orders!="[]"){
+                    foreach($orders as $sid) {
+                        Redis::set('order-'.$sid->id.'-'.Auth::user()->id, $sid);
+                        }
+                    return view('timer',compact('orders'));
+                }else{
+                    return view('timer',compact('orders'));
+                }    
+         }
+        
     }
 
     public function updatestatus($id)
@@ -53,13 +74,15 @@ class TimerController extends Controller
         if($order->user_id==Auth::user()->id){
             $order->status_order =  "Waktu habis";
             $order->save();
+            Redis::del('order-*-'.Auth::user()->id);
             return $id;
         }
 
         $orders=Order::where('user_id', Auth::user()->id )->get();
       
         $tgl= $orders->tgl_order;
-       //return $id;
-        //return view('timer',compact('tgl'));
+
+       
+        return view('timer',compact('tgl'));
     }
 }
