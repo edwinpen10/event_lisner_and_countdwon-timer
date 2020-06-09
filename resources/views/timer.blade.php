@@ -82,13 +82,15 @@
                     </thead>
                     <tbody>
                         @foreach ($orders as $item)
-
+                        @php
+                            dd($orders)
+                        @endphp
                          <tr>
                             <th scope="row">
                                 <div id="alert" class="alert" role="alert" >
-                                    {{$item->status_order}}
+                                    {{$key->status_order}}
                               </div></th>
-                            <td> <div id-data="{{$item->id}}" data-countdown="{{$item->tgl_order}}" data-value="{{$item->status_order}}"></div> </td>
+                            <td> <div id-data="{{$key->id}}" data-countdown="{{$key->tgl_order}}" data-value="{{$key->status_order}}"></div> </td>
                           </tr>
                         
                         

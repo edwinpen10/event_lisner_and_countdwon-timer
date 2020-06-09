@@ -51,8 +51,9 @@ class TimerController extends Controller
                     //echo $item;
                     array_push($n,$a);
                 }
-                 $orders = strval(json_encode($n));
-                 
+                $order = json_encode($n);
+                $orders= json_decode($order);
+               print_r ($orders);  
            //return view('timer',compact('orders'));
          }else {
              $orders = Order::where('user_id', Auth::user()->id)->where('status_order','Belum bayar')->get();
