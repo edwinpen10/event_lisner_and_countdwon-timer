@@ -49,11 +49,11 @@ class TimerController extends Controller
             foreach ($cek as $item) { 
                       $a = Redis::get('order-'.substr($item,23,2).'-'.Auth::user()->id);
                     //echo $item;
-                    array_push($n,$a);
+                    array_push($n,json_decode($a, true));
                 }
-                $order = json_encode($n);
-                $orders= json_decode($order);
-               print_r ($orders);  
+                //$order = json_encode($n);
+                
+               echo($n[0]["id"]);  
            //return view('timer',compact('orders'));
          }else {
              $orders = Order::where('user_id', Auth::user()->id)->where('status_order','Belum bayar')->get();
