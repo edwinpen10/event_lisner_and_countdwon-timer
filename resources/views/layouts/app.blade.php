@@ -19,6 +19,13 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @toastr_css
+
+    <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-messaging.js"></script>
+
+    <link rel="manifest" href=/manifest.json>
+
+
 </head>
 <body>
     <div id="app">
@@ -95,7 +102,9 @@
             @yield('content')
         </main>
     </div>
+    <script src="{{ asset('js/firebase.js') }}"></script>
 </body>
+
 @jquery
 @toastr_js
 @toastr_render

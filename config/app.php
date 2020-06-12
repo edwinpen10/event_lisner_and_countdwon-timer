@@ -178,6 +178,9 @@ return [
         //Toastr alert
         Yoeunes\Toastr\ToastrServiceProvider::class,
 
+        //Firebase Kreait
+        Kreait\Laravel\Firebase\ServiceProvider::class
+
     ],
 
     /*
